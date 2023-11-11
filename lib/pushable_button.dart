@@ -126,36 +126,36 @@ class _PushableButtonState extends AnimationControllerState<PushableButton> {
                     hslColor.withLightness(hslColor.lightness - 0.15);
                 return Stack(
                   children: [
-                    // // Draw bottom layer first
-                    // Positioned(
-                    //   left: 0,
-                    //   right: 0,
-                    //   bottom: 0,
-                    //   child: Container(
-                    //     height: totalHeight - top,
-                    //     decoration: BoxDecoration(
-                    //       color: bottomHslColor.toColor(),
-                    //       boxShadow:
-                    //           widget.shadow != null ? [widget.shadow!] : [],
-                    //       borderRadius:
-                    //           BorderRadius.circular(widget.height / 2),
-                    //     ),
-                    //   ),
-                    // ),
-                    // // Then top (pushable) layer
-                    // Positioned(
-                    //   left: 0,
-                    //   right: 0,
-                    //   top: top,
-                    //   child: Container(
-                    //     height: widget.height,
-                    //     decoration: ShapeDecoration(
-                    //       color: hslColor.toColor(),
-                    //       shape: StadiumBorder(),
-                    //     ),
-                    //     child: Center(child: widget.child),
-                    //   ),
-                    // ),
+                    // Then top (pushable) layer
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      top: top,
+                      child: Container(
+                        height: widget.height,
+                        decoration: ShapeDecoration(
+                          color: hslColor.toColor(),
+                          shape: StadiumBorder(),
+                        ),
+                        child: Center(child: widget.child),
+                      ),
+                    ),
+                    // Draw bottom layer first
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        height: totalHeight - top,
+                        decoration: BoxDecoration(
+                          color: bottomHslColor.toColor(),
+                          boxShadow:
+                              widget.shadow != null ? [widget.shadow!] : [],
+                          borderRadius:
+                              BorderRadius.circular(widget.height / 2),
+                        ),
+                      ),
+                    ),
                   ],
                 );
               },
