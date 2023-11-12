@@ -30,13 +30,9 @@ class _MyHomePageState extends State<MyHomePage> {
       fontSize: 24,
       fontWeight: FontWeight.bold,
     );
-    final shadow = BoxShadow(
-      color: Colors.grey.withOpacity(0.5),
-      spreadRadius: 5,
-      blurRadius: 7,
-      offset: Offset(0, 2),
-    );
+
     return Scaffold(
+      backgroundColor: Colors.white70,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -48,17 +44,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text('PUSH ME 😎', style: textStyle),
                 height: 60,
                 elevation: 8,
-                hslColor: HSLColor.fromAHSL(1.0, 356, 1.0, 0.43),
-                shadow: shadow,
+                color: Colors.redAccent,
                 onPressed: () => setState(() => _selection = '1'),
               ),
               SizedBox(height: 32),
               PushableButton(
-                child: Text('ENROLL NOW', style: textStyle),
-                height: 60,
-                elevation: 8,
-                hslColor: HSLColor.fromAHSL(1.0, 120, 1.0, 0.37),
-                shadow: shadow,
+                child: Text(
+                  'ENROLL NOW',
+                  style: TextStyle(
+                    color: Colors.amber,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),
+                ),
+                height: 80,
+                elevation: 12,
+                color: Colors.white,
+                borderRadius: 12,
                 onPressed: () => setState(() => _selection = '2'),
               ),
               SizedBox(height: 32),
@@ -66,8 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text('ADD TO BASKET', style: textStyle),
                 height: 60,
                 elevation: 8,
-                hslColor: HSLColor.fromAHSL(1.0, 195, 1.0, 0.43),
-                shadow: shadow,
+                color: Colors.blueAccent,
                 onPressed: () => setState(() => _selection = '3'),
               ),
               SizedBox(height: 32),

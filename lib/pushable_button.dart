@@ -9,10 +9,11 @@ class PushableButton extends StatefulWidget {
   const PushableButton({
     Key? key,
     this.child,
-    required this.hslColor,
+    this.animationDuration,
+    required this.color,
     required this.height,
     this.elevation = 8.0,
-    this.shadow,
+    this.borderRadius,
     this.onPressed,
   })  : assert(height > 0),
         super(key: key);
@@ -20,9 +21,12 @@ class PushableButton extends StatefulWidget {
   /// child widget (normally a Text or Icon)
   final Widget? child;
 
+  /// gesture Duration
+  final Duration? animationDuration;
+
   /// Color of the top layer
   /// The color of the bottom layer is derived by decreasing the luminosity by 0.15
-  final HSLColor hslColor;
+  final Color color;
 
   /// height of the top layer
   final double height;
@@ -30,9 +34,8 @@ class PushableButton extends StatefulWidget {
   /// elevation or "gap" between the top and bottom layer
   final double elevation;
 
-  /// An optional shadow to make the button look better
-  /// This is added to the bottom layer only
-  final BoxShadow? shadow;
+  /// An optional radius to make the button look better
+  final double? borderRadius;
 
   /// button pressed callback
   final VoidCallback? onPressed;
@@ -48,6 +51,15 @@ class _PushableButtonState extends AnimationControllerState<PushableButton> {
   bool _isDragInProgress = false;
   Offset _gestureLocation = Offset.zero;
 
+  void _handleTap() {
+    animationController.forward();
+    Future.delayed(widget.animationDuration ?? Duration(milliseconds: 100), () {
+      if (!_isDragInProgress && mounted) {
+        animationController.reverse();
+      }
+    });
+  }
+
   void _handleTapDown(TapDownDetails details) {
     _gestureLocation = details.localPosition;
     animationController.forward();
@@ -59,7 +71,7 @@ class _PushableButtonState extends AnimationControllerState<PushableButton> {
   }
 
   void _handleTapCancel() {
-    Future.delayed(Duration(milliseconds: 100), () {
+    Future.delayed(widget.animationDuration ?? Duration(milliseconds: 100), () {
       if (!_isDragInProgress && mounted) {
         animationController.reverse();
       }
@@ -73,7 +85,6 @@ class _PushableButtonState extends AnimationControllerState<PushableButton> {
   }
 
   void _handleDragEnd(Size buttonSize) {
-    //print('drag end (in progress: $_isDragInProgress)');
     if (_isDragInProgress) {
       _isDragInProgress = false;
       animationController.reverse();
@@ -105,7 +116,9 @@ class _PushableButtonState extends AnimationControllerState<PushableButton> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final buttonSize = Size(constraints.maxWidth, constraints.maxHeight);
+
           return GestureDetector(
+            onTap: _handleTap,
             onTapDown: _handleTapDown,
             onTapUp: _handleTapUp,
             onTapCancel: _handleTapCancel,
@@ -121,25 +134,11 @@ class _PushableButtonState extends AnimationControllerState<PushableButton> {
               animation: animationController,
               builder: (context, child) {
                 final top = animationController.value * widget.elevation;
-                final hslColor = widget.hslColor;
+                final hslColor = HSLColor.fromColor(widget.color);
                 final bottomHslColor =
                     hslColor.withLightness(hslColor.lightness - 0.15);
                 return Stack(
                   children: [
-                    // Then top (pushable) layer
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      top: top,
-                      child: Container(
-                        height: widget.height,
-                        decoration: ShapeDecoration(
-                          color: hslColor.toColor(),
-                          shape: StadiumBorder(),
-                        ),
-                        child: Center(child: widget.child),
-                      ),
-                    ),
                     // Draw bottom layer first
                     Positioned(
                       left: 0,
@@ -149,11 +148,28 @@ class _PushableButtonState extends AnimationControllerState<PushableButton> {
                         height: totalHeight - top,
                         decoration: BoxDecoration(
                           color: bottomHslColor.toColor(),
-                          boxShadow:
-                              widget.shadow != null ? [widget.shadow!] : [],
-                          borderRadius:
-                              BorderRadius.circular(widget.height / 2),
+                          borderRadius: BorderRadius.circular(
+                            widget.borderRadius ?? widget.height / 2,
+                          ),
                         ),
+                      ),
+                    ),
+                    // Then top (pushable) layer
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      top: top,
+                      child: Container(
+                        height: widget.height,
+                        decoration: ShapeDecoration(
+                          color: hslColor.toColor(),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              widget.borderRadius ?? widget.height / 2,
+                            ),
+                          ),
+                        ),
+                        child: Center(child: widget.child),
                       ),
                     ),
                   ],
