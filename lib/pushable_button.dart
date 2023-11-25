@@ -115,21 +115,21 @@ class _PushableButtonState extends AnimationControllerState<PushableButton> {
       height: totalHeight,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final buttonSize = Size(constraints.maxWidth, constraints.maxHeight);
+          // final buttonSize = Size(constraints.maxWidth, constraints.maxHeight);
 
           return GestureDetector(
             onTap: _handleTap,
             onTapDown: _handleTapDown,
             onTapUp: _handleTapUp,
             onTapCancel: _handleTapCancel,
-            onHorizontalDragStart: _handleDragStart,
-            onHorizontalDragEnd: (_) => _handleDragEnd(buttonSize),
-            onHorizontalDragCancel: _handleDragCancel,
-            onHorizontalDragUpdate: _handleDragUpdate,
-            onVerticalDragStart: _handleDragStart,
-            onVerticalDragEnd: (_) => _handleDragEnd(buttonSize),
-            onVerticalDragCancel: _handleDragCancel,
-            onVerticalDragUpdate: _handleDragUpdate,
+            // onHorizontalDragStart: _handleDragStart,
+            // onHorizontalDragEnd: (_) => _handleDragEnd(buttonSize),
+            // onHorizontalDragCancel: _handleDragCancel,
+            // onHorizontalDragUpdate: _handleDragUpdate,
+            // onVerticalDragStart: _handleDragStart,
+            // onVerticalDragEnd: (_) => _handleDragEnd(buttonSize),
+            // onVerticalDragCancel: _handleDragCancel,
+            // onVerticalDragUpdate: _handleDragUpdate,
             child: AnimatedBuilder(
               animation: animationController,
               builder: (context, child) {
